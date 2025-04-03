@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:spacetomic/theme/theme.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -10,7 +9,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Spacetomic',
-      theme: spacetomicTheme,
       home: Home(),
     );
   }
