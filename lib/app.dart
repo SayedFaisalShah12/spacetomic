@@ -1,31 +1,38 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:device_preview/device_preview.dart';
+import 'core/theme.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Spacetomic',
-      home: Home(),
+    return MultiBlocProvider(
+      providers: [
+
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Spacetomic',
+        theme: spacetomicTheme, // Custom dark theme
+        home: const HomeScreen(),
+      ),
     );
   }
 }
 
-class Home extends StatefulWidget {
-  const Home({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeState extends State<Home> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Center(
           child: Text("This is the First Page")
       ),
