@@ -6,7 +6,7 @@ import 'app.dart';
 import 'core/bloc_observer.dart';
 
 void main() {
-  Bloc.observer = MyBlocObserver(); // Observes state changes
+  Bloc.observer = MyBlocObserver(); /// Observes state changes
 
   runApp(
     DevicePreview(
