@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:device_preview/device_preview.dart';
-import 'package:spacetomic/core/theme.dart';
 import 'app.dart';
 import 'core/bloc_observer.dart';
 
