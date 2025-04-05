@@ -6,7 +6,6 @@ final ThemeData spacetomicTheme = ThemeData(
   brightness: Brightness.dark,
   primaryColor: Colors.deepPurpleAccent,
   scaffoldBackgroundColor: Colors.black,
-  textTheme: spacetomicTextTheme,
   appBarTheme: const AppBarTheme(
     backgroundColor: Colors.black,
     elevation: 0,
