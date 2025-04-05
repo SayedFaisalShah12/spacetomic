@@ -1,70 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AppStyles {
-  static TextStyle titleBold = GoogleFonts.orbitron(
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class AppStyle {
+  // Display / Large Headings
+  static final displayLarge = GoogleFonts.orbitron(
+    fontSize: 36,
+    fontWeight: FontWeight.bold,
+    color: Colors.deepPurpleAccent,
+  );
+
+  static final displayMedium = GoogleFonts.orbitron(
+    fontSize: 30,
+    fontWeight: FontWeight.w700,
+    color: Colors.white,
+  );
+
+  static final displaySmall = GoogleFonts.orbitron(
     fontSize: 24,
-    fontWeight: FontWeight.bold,
+    fontWeight: FontWeight.w600,
+    color: Colors.white70,
   );
 
-  static TextStyle titleSemiBold = GoogleFonts.orbitron(
+  // Headlines
+  static final headlineLarge = GoogleFonts.orbitron(
     fontSize: 22,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w500,
+    color: Colors.deepPurpleAccent,
   );
 
-  static TextStyle titleMedium = GoogleFonts.orbitron(
+  static final headlineMedium = GoogleFonts.orbitron(
     fontSize: 20,
     fontWeight: FontWeight.w500,
+    color: Colors.white,
   );
 
-  static TextStyle titleMediumYellow = GoogleFonts.orbitron(
-    fontSize: 20,
-    fontWeight: FontWeight.w500,
-  );
-
-  static TextStyle titleRegular = GoogleFonts.orbitron(
+  // Titles
+  static final titleLarge = GoogleFonts.orbitron(
     fontSize: 18,
-    fontWeight: FontWeight.w400,
+    fontWeight: FontWeight.w500,
+    color: Colors.white,
   );
 
-  static TextStyle titleLight = GoogleFonts.orbitron(
+  static final titleMedium = GoogleFonts.orbitron(
     fontSize: 16,
-    fontWeight: FontWeight.w300,
+    fontWeight: FontWeight.w500,
+    color: Colors.grey[400],
   );
 
-  static TextStyle titleThin = GoogleFonts.orbitron(
+  // Body Text
+  static final bodyLarge = GoogleFonts.orbitron(
+    fontSize: 16,
+    color: Colors.white,
+  );
+
+  static final bodyMedium = GoogleFonts.orbitron(
     fontSize: 14,
-    fontWeight: FontWeight.w200,
+    color: Colors.white70,
   );
 
-  // Body Text - League Spartan Font
-  static TextStyle bodyBold = GoogleFonts.orbitron(
-    fontSize: 20,
+  // Labels / Buttons
+  static final labelLarge = GoogleFonts.orbitron(
+    fontSize: 14,
     fontWeight: FontWeight.bold,
+    color: Colors.deepPurpleAccent,
   );
 
-  static TextStyle bodySemiBold = GoogleFonts.orbitron(
-    fontSize: 18,
-    fontWeight: FontWeight.w600,
-  );
-
-  static TextStyle bodyMedium = GoogleFonts.orbitron(
-    fontSize: 16,
-    fontWeight: FontWeight.w500,
-  );
-
-  static TextStyle bodyRegular = GoogleFonts.orbitron(
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-  );
-
-  static TextStyle bodyLight = GoogleFonts.orbitron(
+  static final labelSmall = GoogleFonts.orbitron(
     fontSize: 12,
-    fontWeight: FontWeight.w300,
-  );
-
-  static TextStyle bodyThin = GoogleFonts.orbitron(
-    fontSize: 10,
-    fontWeight: FontWeight.w200,
+    fontWeight: FontWeight.w600,
+    color: Colors.white,
   );
 }
