@@ -8,15 +8,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Spacetomic',
-        home: const SplashScreen(),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Spacetomic',
+      home: const SplashScreen(),
     );
   }
 }
