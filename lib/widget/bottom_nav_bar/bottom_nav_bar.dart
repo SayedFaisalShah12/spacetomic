@@ -5,7 +5,6 @@ import '../../logic/bottom_nav_bar/navigation_bloc.dart';
 import '../../logic/bottom_nav_bar/navigation_event.dart';
 import '../../logic/bottom_nav_bar/navigation_state.dart';
 
-
 class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

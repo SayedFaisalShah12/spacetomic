@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spacetomic/widget/bottom_nav_bar/bottom_nav_bar.dart';
 import '../../core/constant/app_color.dart';
 import '../../core/constant/app_style.dart';
 import '../../widget/dotted_circle.dart';
@@ -52,7 +53,7 @@ class SplashScreen extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  // TODO: Navigate to main menu
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> CustomBottomNavBar()));
                 },
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
