@@ -6,7 +6,7 @@ import '../../logic/bottom_nav_bar/navigation_event.dart';
 import '../../logic/bottom_nav_bar/navigation_state.dart';
 
 
-class CustomNavBar extends StatelessWidget {
+class CustomBottomNavBar extends StatelessWidget {
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
 
