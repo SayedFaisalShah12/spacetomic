@@ -1,4 +1,4 @@
 class NavigationState {
   final int selectedIndex;
-  NavigationState(this.selectedIndex);
+  const NavigationState(this.selectedIndex);
 }

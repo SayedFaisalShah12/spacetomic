@@ -1,6 +1,6 @@
 abstract class NavigationEvent {}
 
-class NavigateToTab extends NavigationEvent {
+class ChangeTab extends NavigationEvent {
   final int index;
-  NavigateToTab(this.index);
+  ChangeTab(this.index);
 }
