@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constant/app_color.dart';
 import '../../core/constant/app_style.dart';
-import '../widget/dotted_circle.dart';
+import '../../widget/dotted_circle.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
