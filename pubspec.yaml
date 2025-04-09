@@ -16,6 +16,7 @@ dependencies:
   device_preview: ^1.2.0
   google_fonts: ^6.2.1
   cupertino_icons: ^1.0.8
+  google_nav_bar: ^5.0.7
 
   # Bloc
   flutter_bloc: ^9.1.0
