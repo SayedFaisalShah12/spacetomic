@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<NavigationBloc>(
-          create: (context) => NavigationBloc()..add(NavigateToTab(0)),
+          create: (_) => NavigationBloc()..add(ChangeTab(0)),
         ),
       ],
       child: MaterialApp(

@@ -55,7 +55,7 @@ class CustomNavBar extends StatelessWidget {
                   color: Colors.black,
                   tabs: [
                      GButton(icon: Icons.home, text: 'Home'),
-                     GButton(icon: Icons.heart, text: 'Likes'),
+                     GButton(icon: Icons.heart_broken, text: 'Likes'),
                      GButton(icon: Icons.search, text: 'Search'),
                      GButton(icon: Icons.person_2_outlined, text: 'Profile'),
                   ],
