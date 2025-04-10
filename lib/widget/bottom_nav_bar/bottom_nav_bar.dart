@@ -24,10 +24,6 @@ class CustomBottomNavBar extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Colors.white,
-          appBar: AppBar(
-            elevation: 20,
-            title: const Text('GoogleNavBar with BLoC'),
-          ),
           body: Center(
             child: _widgetOptions[state.selectedIndex],
           ),
