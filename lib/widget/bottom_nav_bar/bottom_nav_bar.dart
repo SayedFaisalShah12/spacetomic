@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:spacetomic/presentation/home/home_screen.dart';
 import '../../logic/bottom_nav_bar/navigation_bloc.dart';
 import '../../logic/bottom_nav_bar/navigation_event.dart';
 import '../../logic/bottom_nav_bar/navigation_state.dart';
@@ -11,7 +12,7 @@ class CustomBottomNavBar extends StatelessWidget {
   TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
 
   static final List<Widget> _widgetOptions = <Widget>[
-    Text('Home', style: optionStyle),
+    const HomeScreen(),
     Text('Likes', style: optionStyle),
     Text('Search', style: optionStyle),
     Text('Profile', style: optionStyle),
