@@ -40,8 +40,8 @@ class CustomBottomNavBar extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
                 child: GNav(
-                  rippleColor: Colors.grey[300]!,
-                  hoverColor: Colors.grey[100]!,
+                  rippleColor: AppColors.primary,
+                  hoverColor: AppColors.surface,
                   gap: 8,
                   activeColor: Colors.black,
                   iconSize: 24,
