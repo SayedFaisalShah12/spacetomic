@@ -9,8 +9,7 @@ import '../../logic/bottom_nav_bar/navigation_state.dart';
 
 
 class CustomBottomNavBar extends StatelessWidget {
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
+  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
 
   static final List<Widget> _widgetOptions = <Widget>[
     const HomeScreen(),
