@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:spacetomic/core/constant/app_color.dart';
 import 'package:spacetomic/presentation/home/home_screen.dart';
 import '../../logic/bottom_nav_bar/navigation_bloc.dart';
 import '../../logic/bottom_nav_bar/navigation_event.dart';
@@ -23,17 +24,16 @@ class CustomBottomNavBar extends StatelessWidget {
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: Colors.white,
           body: Center(
             child: _widgetOptions[state.selectedIndex],
           ),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.background,
               boxShadow: [
                 BoxShadow(
                   blurRadius: 20,
-                  color: Colors.black.withOpacity(.1),
+                  color: AppColors.surface,
                 )
               ],
             ),
