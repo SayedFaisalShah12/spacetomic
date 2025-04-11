@@ -13,9 +13,6 @@ class HomeScreen extends StatelessWidget {
     return BlocProvider<HomeBloc>(
       create: (_) => HomeBloc()..add(LoadHomeContent()),
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Spacetomic Home"),
-        ),
         body: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             if (state is HomeLoading) {
