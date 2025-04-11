@@ -48,7 +48,7 @@ class CustomBottomNavBar extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   duration: Duration(milliseconds: 400),
                   tabBackgroundColor: Colors.grey[100]!,
-                  color: Colors.black,
+                  color: AppColors.textPrimary,
                   tabs: [
                      GButton(icon: Icons.home, text: 'Home'),
                      GButton(icon: Icons.heart_broken, text: 'Likes'),
