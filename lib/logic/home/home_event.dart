@@ -1,3 +1,6 @@
-abstract class HomeEvent {}
+abstract class MenuEvent {}
 
-class LoadHomeContent extends HomeEvent {}
+class SelectMenuItem extends MenuEvent {
+  final int index;
+  SelectMenuItem(this.index);
+}
