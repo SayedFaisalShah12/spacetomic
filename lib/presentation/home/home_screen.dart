@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spacetomic/core/constant/app_style.dart';
+import 'package:spacetomic/logic/bottom_nav_bar/navigation_bloc.dart';
 import 'package:spacetomic/widget/bottom_nav_bar/bottom_nav_bar.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -7,7 +9,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomBottomNavBar();
+    return BlocProvider(
+      create: (context) => NavigationBloc(),
+      child: CustomBottomNavBar(),
+    );
   }
 }
 
