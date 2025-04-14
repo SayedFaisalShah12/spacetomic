@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spacetomic/core/constant/app_style.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -16,25 +17,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       title: 'Explore the Universe',
       description:
           'Discover amazing space phenomena and cosmic wonders from the comfort of your device',
-      image:
-          'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?ixlib=rb-4.0.3',
-      color: Colors.deepPurple,
+      image: 'assets/images/onboarding1.png',
+      color: Colors.deepPurpleAccent,
     ),
     OnboardingPage(
       title: 'Latest Space Missions',
       description:
           'Stay updated with the most recent space missions and discoveries from NASA and other space agencies',
-      image:
-          'https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3',
-      color: Colors.blue,
+      image: 'assets/images/onboarding2.png',
+      color: Colors.deepPurpleAccent,
     ),
     OnboardingPage(
       title: 'Astronomy Insights',
       description:
           'Learn about stars, planets, galaxies, and black holes with detailed information and stunning visuals',
-      image:
-          'https://images.unsplash.com/photo-1446776858070-70c3d5e78121?ixlib=rb-4.0.3',
-      color: Colors.purple,
+      image: 'assets/images/onboarding3.png',
+      color: Colors.deepPurpleAccent,
     ),
   ];
 
@@ -51,11 +49,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         children: [
           // Background
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [Colors.black, Colors.deepPurple.shade900],
+                colors: [Color(0xFF061A2D), Color(0xFF0A1F2E)],
               ),
             ),
           ),
@@ -92,7 +90,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Image.network(
+                          child: Image.asset(
                             page.image,
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
@@ -113,11 +111,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     // Title
                     Text(
                       page.title,
-                      style: const TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                      style: AppStyle.displayMedium,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 16),
@@ -125,11 +119,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     // Description
                     Text(
                       page.description,
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white.withOpacity(0.8),
-                        height: 1.5,
-                      ),
+                      style: AppStyle.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
                   ],
@@ -185,13 +175,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: const Text(
-                          'Get Started',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                        child: Text('Get Started', style: AppStyle.labelLarge),
                       ),
                     )
                   else
@@ -207,13 +191,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               curve: Curves.easeInOut,
                             );
                           },
-                          child: Text(
-                            'Skip',
-                            style: TextStyle(
-                              color: Colors.white.withOpacity(0.7),
-                              fontSize: 16,
-                            ),
-                          ),
+                          child: Text('Skip', style: AppStyle.bodyMedium),
                         ),
                         FloatingActionButton(
                           onPressed: () {

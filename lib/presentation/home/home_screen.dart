@@ -1,218 +1,242 @@
 import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:spacetomic/core/constant/app_style.dart';
 
-class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
-  final List<MenuItemData> menuItems = const [
-    MenuItemData(title: 'All', icon: Icons.all_inclusive, color: Colors.blue),
-    MenuItemData(title: 'Stars', icon: Icons.star, color: Colors.amber),
-    MenuItemData(title: 'Planets', icon: Icons.public, color: Colors.green),
-    MenuItemData(
-      title: 'Galaxies',
-      icon: Icons.blur_circular,
-      color: Colors.purple,
-    ),
-    MenuItemData(
-      title: 'Missions',
-      icon: Icons.rocket_launch,
-      color: Colors.red,
-    ),
-    MenuItemData(
-      title: 'Black Holes',
-      icon: Icons.radar,
-      color: Colors.deepPurple,
-    ),
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _selectedIndex = 0;
+
+  final List<Widget> _pages = [
+    const HomeContent(),
+    const Center(child: Text('Explore Page')),
+    const Center(child: Text('Settings Page')),
   ];
-
-  final List<SpaceContent> spaceContents = const [
-    SpaceContent(
-      title: 'James Webb Space Telescope',
-      subtitle:
-          'NASA\'s revolutionary space telescope capturing stunning images of the universe',
-      imageUrl:
-          'https://www.nasa.gov/wp-content/uploads/2023/01/webb-first-images-full-1280.jpg',
-      link: 'https://www.nasa.gov/webbfirstimages',
-    ),
-    SpaceContent(
-      title: 'Mars Perseverance Rover',
-      subtitle:
-          'Exploring the Red Planet and searching for signs of ancient life',
-      imageUrl:
-          'https://www.nasa.gov/wp-content/uploads/2021/02/pia24427-16.jpg',
-      link: 'https://www.nasa.gov/perseverance',
-    ),
-    SpaceContent(
-      title: 'Hubble Space Telescope',
-      subtitle: 'Over 30 years of breathtaking cosmic discoveries',
-      imageUrl:
-          'https://www.nasa.gov/wp-content/uploads/2021/06/hubble_servicing_4.jpg',
-      link: 'https://www.nasa.gov/hubble',
-    ),
-  ];
-
-  final ValueNotifier<int> selectedIndex = ValueNotifier(0);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Spacetomic')),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 16),
-
-          // Horizontal Menu with Circle Avatars
-          SizedBox(
-            height: 100,
-            child: ValueListenableBuilder<int>(
-              valueListenable: selectedIndex,
-              builder:
-                  (_, currentIndex, __) => ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    itemCount: menuItems.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 16),
-                    itemBuilder: (context, index) {
-                      final item = menuItems[index];
-                      final selected = index == currentIndex;
-                      return GestureDetector(
-                        onTap: () => selectedIndex.value = index,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(3),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border:
-                                    selected
-                                        ? Border.all(
-                                          color: item.color,
-                                          width: 2,
-                                        )
-                                        : null,
-                              ),
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor:
-                                    selected
-                                        ? item.color
-                                        : item.color.withOpacity(0.2),
-                                child: Icon(
-                                  item.icon,
-                                  color: selected ? Colors.white : item.color,
-                                  size: 28,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              item.title,
-                              style: TextStyle(
-                                color: selected ? item.color : Colors.grey,
-                                fontWeight:
-                                    selected
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFF061A2D),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              spreadRadius: 2,
             ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: GNav(
+            backgroundColor: const Color(0xFF061A2D),
+            color: Colors.white,
+            activeColor: Colors.deepPurpleAccent,
+            tabBackgroundColor: Colors.deepPurpleAccent.withOpacity(0.1),
+            gap: 8,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            tabs: const [
+              GButton(icon: Icons.home, text: 'Home'),
+              GButton(icon: Icons.explore, text: 'Explore'),
+              GButton(icon: Icons.settings, text: 'Settings'),
+            ],
+            selectedIndex: _selectedIndex,
+            onTabChange: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
           ),
-
-          const SizedBox(height: 24),
-
-          // Space Content List
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: spaceContents.length,
-              itemBuilder: (context, index) {
-                final content = spaceContents[index];
-                return Card(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  elevation: 4,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      // Handle link opening
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ClipRRect(
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(12),
-                          ),
-                          child: Image.network(
-                            content.imageUrl,
-                            height: 200,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                height: 200,
-                                color: Colors.grey[300],
-                                child: const Icon(Icons.error_outline),
-                              );
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                content.title,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                content.subtitle,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey[600],
-                                ),
-                              ),
-                              const SizedBox(height: 12),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  TextButton(
-                                    onPressed: () {
-                                      // Handle link opening
-                                    },
-                                    child: const Text('Learn More'),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
+
+class HomeContent extends StatelessWidget {
+  const HomeContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16),
+
+        // Horizontal Menu
+        SizedBox(
+          height: 100,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: menuItems.length,
+            separatorBuilder: (_, __) => const SizedBox(width: 16),
+            itemBuilder: (context, index) {
+              final item = menuItems[index];
+              return GestureDetector(
+                onTap: () {
+                  // Handle menu item tap
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(3),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: item.color.withOpacity(0.2),
+                        boxShadow: [
+                          BoxShadow(
+                            color: item.color.withOpacity(0.3),
+                            blurRadius: 20,
+                            spreadRadius: 5,
+                          ),
+                        ],
+                      ),
+                      child: CircleAvatar(
+                        radius: 30,
+                        backgroundColor: item.color.withOpacity(0.2),
+                        child: Icon(item.icon, color: item.color, size: 28),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(item.title, style: AppStyle.labelSmall),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+
+        const SizedBox(height: 24),
+
+        // Space Content List
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: spaceContents.length,
+            itemBuilder: (context, index) {
+              final content = spaceContents[index];
+              return Card(
+                margin: const EdgeInsets.only(bottom: 16),
+                elevation: 4,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: InkWell(
+                  onTap: () {
+                    // Handle content tap
+                  },
+                  borderRadius: BorderRadius.circular(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                        child: Image.asset(
+                          content.imageUrl,
+                          height: 200,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              height: 200,
+                              color: Colors.grey[300],
+                              child: const Icon(Icons.error_outline),
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(content.title, style: AppStyle.titleLarge),
+                            const SizedBox(height: 8),
+                            Text(content.subtitle, style: AppStyle.titleMedium),
+                            const SizedBox(height: 12),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    // Handle learn more
+                                  },
+                                  child: Text(
+                                    'Learn More',
+                                    style: AppStyle.labelLarge,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+final List<MenuItemData> menuItems = const [
+  MenuItemData(
+    title: 'All',
+    icon: Icons.all_inclusive,
+    color: Colors.deepPurpleAccent,
+  ),
+  MenuItemData(title: 'Stars', icon: Icons.star, color: Colors.amber),
+  MenuItemData(title: 'Planets', icon: Icons.public, color: Colors.green),
+  MenuItemData(
+    title: 'Galaxies',
+    icon: Icons.blur_circular,
+    color: Colors.purple,
+  ),
+  MenuItemData(title: 'Missions', icon: Icons.rocket_launch, color: Colors.red),
+  MenuItemData(
+    title: 'Black Holes',
+    icon: Icons.radar,
+    color: Colors.deepPurple,
+  ),
+];
+
+final List<SpaceContent> spaceContents = const [
+  SpaceContent(
+    title: 'James Webb Space Telescope',
+    subtitle:
+        'NASA\'s revolutionary space telescope capturing stunning images of the universe',
+    imageUrl: 'assets/images/webb_telescope.png',
+    link: 'https://www.nasa.gov/webbfirstimages',
+  ),
+  SpaceContent(
+    title: 'Mars Perseverance Rover',
+    subtitle:
+        'Exploring the Red Planet and searching for signs of ancient life',
+    imageUrl: 'assets/images/mars_rover.png',
+    link: 'https://www.nasa.gov/perseverance',
+  ),
+  SpaceContent(
+    title: 'Hubble Space Telescope',
+    subtitle: 'Over 30 years of breathtaking cosmic discoveries',
+    imageUrl: 'assets/images/hubble.png',
+    link: 'https://www.nasa.gov/hubble',
+  ),
+];
 
 class MenuItemData {
   final String title;
