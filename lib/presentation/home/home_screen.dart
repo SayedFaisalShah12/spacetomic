@@ -1,83 +1,184 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../logic/bottom_nav_bar/navigation_bloc.dart';
+import '../../widget/bottom_nav_bar/bottom_nav_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => NavigationBloc(),
-      child: HomeContent(),
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Color(0xFF061A2D),
+          body: HomeContent(),
+          bottomNavigationBar: CustomBottomNavBar(),
+        ),
+      ),
     );
   }
 }
 
 class HomeContent extends StatelessWidget {
-  final List<String> menuItems = [
-    'All',
-    'Planets',
-    'Stars',
-    'Galaxies',
-    'Nebulae',
-  ];
-  final List<Map<String, String>> spaceContent = [
-    {
-      'image': 'assets/images/space1.png',
-      'title': 'Mars Exploration',
-      'subtitle': 'Discover the Red Planet',
-    },
-    {
-      'image': 'assets/images/space2.png',
-      'title': 'Solar System',
-      'subtitle': 'Journey through our cosmic neighborhood',
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          // Horizontal Menu
-          Container(
-            height: 50,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: menuItems.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Center(
-                    child: Text(
-                      menuItems[index],
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                );
-              },
+    return Column(
+      children: [
+        // App Title
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 16),
+          child: Text(
+            'Spacetomic',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
             ),
           ),
+        ),
 
-          // Space Content List
-          ListView.builder(
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: spaceContent.length,
+        // Top Horizontal Menu
+        Container(
+          height: 60,
+          padding: EdgeInsets.symmetric(vertical: 8),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: menuItems.length,
             itemBuilder: (context, index) {
+              final item = menuItems[index];
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  decoration: BoxDecoration(
+                    color: item.color.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(item.icon, color: item.color),
+                      SizedBox(width: 8),
+                      Text(
+                        item.title,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+
+        // Space Content List
+        Expanded(
+          child: ListView.builder(
+            padding: EdgeInsets.all(16),
+            itemCount: spaceContents.length,
+            itemBuilder: (context, index) {
+              final content = spaceContents[index];
               return Card(
-                margin: EdgeInsets.all(8.0),
+                margin: EdgeInsets.only(bottom: 16),
+                color: Color(0xFF0A1F2E),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Image.asset(
-                      spaceContent[index]['image']!,
-                      fit: BoxFit.cover,
+                    ClipRRect(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(12),
+                      ),
+                      child: Image.network(
+                        content.link,
+                        width: double.infinity,
+                        height: 200,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: double.infinity,
+                            height: 200,
+                            color: Colors.grey[800],
+                            child: Icon(
+                              Icons.error_outline,
+                              color: Colors.white54,
+                              size: 50,
+                            ),
+                          );
+                        },
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Container(
+                            width: double.infinity,
+                            height: 200,
+                            color: Colors.grey[800],
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.deepPurpleAccent,
+                                value:
+                                    loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress
+                                                .cumulativeBytesLoaded /
+                                            loadingProgress.expectedTotalBytes!
+                                        : null,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                    ListTile(
-                      title: Text(spaceContent[index]['title']!),
-                      subtitle: Text(spaceContent[index]['subtitle']!),
-                      trailing: TextButton(
-                        onPressed: () {},
-                        child: Text('Learn More'),
+                    Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            content.title,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            content.subtitle,
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 14,
+                            ),
+                          ),
+                          SizedBox(height: 16),
+                          TextButton(
+                            onPressed: () {
+                              // Handle link tap
+                            },
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 24,
+                                vertical: 12,
+                              ),
+                              backgroundColor: Colors.deepPurpleAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: Text(
+                              'Learn More',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -85,8 +186,8 @@ class HomeContent extends StatelessWidget {
               );
             },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
