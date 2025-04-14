@@ -10,9 +10,8 @@ import '../../logic/bottom_nav_bar/navigation_state.dart';
 class CustomBottomNavBar extends StatelessWidget {
   final List<Widget> _widgetOptions = <Widget>[
     HomeContent(),
-    Center(child: Text('Likes Page', style: TextStyle(color: Colors.white))),
-    Center(child: Text('Search Page', style: TextStyle(color: Colors.white))),
-    Center(child: Text('Profile Page', style: TextStyle(color: Colors.white))),
+    Center(child: Text('Explore', style: TextStyle(color: Colors.white))),
+    Center(child: Text('Setting', style: TextStyle(color: Colors.white))),
   ];
 
   @override
@@ -47,9 +46,8 @@ class CustomBottomNavBar extends StatelessWidget {
                   color: Colors.white,
                   tabs: [
                     GButton(icon: Icons.home, text: 'Home'),
-                    GButton(icon: Icons.favorite, text: 'Likes'),
-                    GButton(icon: Icons.search, text: 'Search'),
-                    GButton(icon: Icons.person, text: 'Profile'),
+                    GButton(icon: Icons.explore, text: 'Explore'),
+                    GButton(icon: Icons.security, text: 'Setting'),
                   ],
                   selectedIndex: state.selectedIndex,
                   onTabChange: (index) {
