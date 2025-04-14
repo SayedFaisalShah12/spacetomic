@@ -1,29 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:spacetomic/core/constant/app_color.dart';
-import 'package:spacetomic/presentation/home/home_screen.dart';
 import '../../logic/bottom_nav_bar/navigation_bloc.dart';
 import '../../logic/bottom_nav_bar/navigation_event.dart';
 import '../../logic/bottom_nav_bar/navigation_state.dart';
+import '../../presentation/home/home_screen.dart';
+import '../../presentation/settings/settings_screen.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
-  final List<Widget> _widgetOptions = <Widget>[
-    HomeContent(),
-    Center(child: Text('Explore', style: TextStyle(color: Colors.white))),
-    Center(child: Text('Setting', style: TextStyle(color: Colors.white))),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: Color(0xFF061A2D),
-          body: _widgetOptions.elementAt(state.selectedIndex),
+          body: _widgetOptions[state.selectedIndex],
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
-              color: Color(0xFF0A1F2E),
+              color: Color(0xFF061A2D),
               boxShadow: [
                 BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1)),
               ],
@@ -43,11 +36,11 @@ class CustomBottomNavBar extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   duration: Duration(milliseconds: 400),
                   tabBackgroundColor: Colors.deepPurpleAccent,
-                  color: Colors.white,
+                  color: Colors.white70,
                   tabs: [
                     GButton(icon: Icons.home, text: 'Home'),
                     GButton(icon: Icons.explore, text: 'Explore'),
-                    GButton(icon: Icons.security, text: 'Setting'),
+                    GButton(icon: Icons.settings, text: 'Settings'),
                   ],
                   selectedIndex: state.selectedIndex,
                   onTabChange: (index) {
@@ -61,4 +54,12 @@ class CustomBottomNavBar extends StatelessWidget {
       },
     );
   }
+
+  static final List<Widget> _widgetOptions = <Widget>[
+    HomeScreen(),
+    HomeScreen(),
+    SettingsScreen(),
+  ];
+
+  const CustomBottomNavBar({super.key});
 }
