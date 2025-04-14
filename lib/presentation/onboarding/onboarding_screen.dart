@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spacetomic/core/constant/app_color.dart';
 import 'package:spacetomic/core/constant/app_style.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -75,38 +76,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Image
-                    Expanded(
-                      flex: 3,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: page.color.withOpacity(0.3),
-                              blurRadius: 20,
-                              spreadRadius: 5,
-                            ),
-                          ],
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(20),
-                          child: Image.asset(
-                            page.image,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Container(
-                                color: page.color.withOpacity(0.2),
-                                child: const Icon(
-                                  Icons.error_outline,
-                                  size: 50,
-                                ),
-                              );
-                            },
+                    Container(
+                      width: 150,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: page.color.withOpacity(0.3),
+                            blurRadius: 20,
+                            spreadRadius: 5,
                           ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.asset(
+                          page.image,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: page.color.withOpacity(0.2),
+                              child: const Icon(Icons.error_outline, size: 50),
+                            );
+                          },
                         ),
                       ),
                     ),
-                    const SizedBox(height: 40),
+
+                    SizedBox(height: 20),
 
                     // Title
                     Text(
@@ -175,7 +172,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                        child: Text('Get Started', style: AppStyle.labelLarge),
+                        child: Text(
+                          'Get Started',
+                          style: AppStyle.labelLarge.copyWith(
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
                       ),
                     )
                   else
