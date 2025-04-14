@@ -24,6 +24,32 @@ class HomeScreen extends StatelessWidget {
     ),
   ];
 
+  final List<SpaceContent> spaceContents = const [
+    SpaceContent(
+      title: 'James Webb Space Telescope',
+      subtitle:
+          'NASA\'s revolutionary space telescope capturing stunning images of the universe',
+      imageUrl:
+          'https://www.nasa.gov/wp-content/uploads/2023/01/webb-first-images-full-1280.jpg',
+      link: 'https://www.nasa.gov/webbfirstimages',
+    ),
+    SpaceContent(
+      title: 'Mars Perseverance Rover',
+      subtitle:
+          'Exploring the Red Planet and searching for signs of ancient life',
+      imageUrl:
+          'https://www.nasa.gov/wp-content/uploads/2021/02/pia24427-16.jpg',
+      link: 'https://www.nasa.gov/perseverance',
+    ),
+    SpaceContent(
+      title: 'Hubble Space Telescope',
+      subtitle: 'Over 30 years of breathtaking cosmic discoveries',
+      imageUrl:
+          'https://www.nasa.gov/wp-content/uploads/2021/06/hubble_servicing_4.jpg',
+      link: 'https://www.nasa.gov/hubble',
+    ),
+  ];
+
   final ValueNotifier<int> selectedIndex = ValueNotifier(0);
 
   @override
@@ -101,13 +127,85 @@ class HomeScreen extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // You can add featured NASA image / content here
+          // Space Content List
           Expanded(
-            child: Center(
-              child: Text(
-                '🌌 Welcome to Spacetomic!',
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: spaceContents.length,
+              itemBuilder: (context, index) {
+                final content = spaceContents[index];
+                return Card(
+                  margin: const EdgeInsets.only(bottom: 16),
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      // Handle link opening
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(12),
+                          ),
+                          child: Image.network(
+                            content.imageUrl,
+                            height: 200,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Container(
+                                height: 200,
+                                color: Colors.grey[300],
+                                child: const Icon(Icons.error_outline),
+                              );
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                content.title,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                content.subtitle,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.grey[600],
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      // Handle link opening
+                                    },
+                                    child: const Text('Learn More'),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -125,5 +223,19 @@ class MenuItemData {
     required this.title,
     required this.icon,
     required this.color,
+  });
+}
+
+class SpaceContent {
+  final String title;
+  final String subtitle;
+  final String imageUrl;
+  final String link;
+
+  const SpaceContent({
+    required this.title,
+    required this.subtitle,
+    required this.imageUrl,
+    required this.link,
   });
 }
