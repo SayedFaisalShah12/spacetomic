@@ -1,62 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:spacetomic/core/constant/app_style.dart';
+import 'package:spacetomic/widget/bottom_nav_bar/bottom_nav_bar.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    const HomeContent(),
-    const Center(child: Text('Explore Page')),
-    const Center(child: Text('Settings Page')),
-  ];
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_selectedIndex],
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF061A2D),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 10,
-              spreadRadius: 2,
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: GNav(
-            backgroundColor: const Color(0xFF061A2D),
-            color: Colors.white,
-            activeColor: Colors.deepPurpleAccent,
-            tabBackgroundColor: Colors.deepPurpleAccent.withOpacity(0.1),
-            gap: 8,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            tabs: const [
-              GButton(icon: Icons.home, text: 'Home'),
-              GButton(icon: Icons.explore, text: 'Explore'),
-              GButton(icon: Icons.settings, text: 'Settings'),
-            ],
-            selectedIndex: _selectedIndex,
-            onTabChange: (index) {
-              setState(() {
-                _selectedIndex = index;
-              });
-            },
-          ),
-        ),
-      ),
-    );
+    return CustomBottomNavBar();
   }
 }
 
