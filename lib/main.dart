@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:device_preview/device_preview.dart';
-import 'app.dart';
-import 'core/bloc_observer.dart';
+import 'package:spacetomic/presentation/home/home_screen.dart';
+import 'package:spacetomic/presentation/onboarding/onboarding_screen.dart';
 
 void main() {
-  Bloc.observer = MyBlocObserver(); /// Observes state changes
+  runApp(const MyApp());
+}
 
-  runApp(
-    DevicePreview(
-      enabled: true,
-      builder: (context) => const MyApp(),
-    ),
-  );
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Spacetomic',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+      ),
+      initialRoute: '/onboarding',
+      routes: {
+        '/onboarding': (context) => OnboardingScreen(),
+        '/home': (context) => HomeScreen(),
+      },
+    );
+  }
 }
