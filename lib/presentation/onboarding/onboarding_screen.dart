@@ -17,21 +17,21 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       title: 'Explore the Universe',
       description:
           'Discover amazing space phenomena and cosmic wonders from the comfort of your device',
-      image: 'assets/images/onboarding1.png',
+      image: 'assets/images/astronaut.png',
       color: Colors.deepPurpleAccent,
     ),
     OnboardingPage(
       title: 'Latest Space Missions',
       description:
           'Stay updated with the most recent space missions and discoveries from NASA and other space agencies',
-      image: 'assets/images/onboarding2.png',
+      image: 'assets/images/astronaut.png',
       color: Colors.deepPurpleAccent,
     ),
     OnboardingPage(
       title: 'Astronomy Insights',
       description:
           'Learn about stars, planets, galaxies, and black holes with detailed information and stunning visuals',
-      image: 'assets/images/onboarding3.png',
+      image: 'assets/images/astronaut.png',
       color: Colors.deepPurpleAccent,
     ),
   ];
