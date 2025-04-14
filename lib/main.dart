@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:spacetomic/presentation/home/home_screen.dart';
 import 'package:spacetomic/presentation/onboarding/onboarding_screen.dart';
+import 'package:spacetomic/presentation/splash/splash_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(DevicePreview(enabled: true, builder: (context) => const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -20,8 +22,9 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      initialRoute: '/onboarding',
+      initialRoute: '/splash',
       routes: {
+        '/splash': (context) => SplashScreen(),
         '/onboarding': (context) => OnboardingScreen(),
         '/home': (context) => HomeScreen(),
       },
