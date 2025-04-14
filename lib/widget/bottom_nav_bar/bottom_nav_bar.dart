@@ -7,15 +7,12 @@ import '../../logic/bottom_nav_bar/navigation_bloc.dart';
 import '../../logic/bottom_nav_bar/navigation_event.dart';
 import '../../logic/bottom_nav_bar/navigation_state.dart';
 
-
 class CustomBottomNavBar extends StatelessWidget {
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.w600);
-
-  static final List<Widget> _widgetOptions = <Widget>[
-     HomeScreen(),
-    Text('Likes', style: optionStyle),
-    Text('Search', style: optionStyle),
-    Text('Profile', style: optionStyle),
+  final List<Widget> _widgetOptions = <Widget>[
+    HomeContent(),
+    Center(child: Text('Likes Page', style: TextStyle(color: Colors.white))),
+    Center(child: Text('Search Page', style: TextStyle(color: Colors.white))),
+    Center(child: Text('Profile Page', style: TextStyle(color: Colors.white))),
   ];
 
   @override
@@ -23,37 +20,36 @@ class CustomBottomNavBar extends StatelessWidget {
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return Scaffold(
-          body: Center(
-            child: _widgetOptions[state.selectedIndex],
-          ),
+          backgroundColor: Color(0xFF061A2D),
+          body: _widgetOptions.elementAt(state.selectedIndex),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
-              color: AppColors.background,
+              color: Color(0xFF0A1F2E),
               boxShadow: [
-                BoxShadow(
-                  blurRadius: 20,
-                  color: AppColors.surface,
-                )
+                BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1)),
               ],
             ),
             child: SafeArea(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 15.0,
+                  vertical: 8,
+                ),
                 child: GNav(
-                  rippleColor: AppColors.primary,
-                  hoverColor: AppColors.surface,
+                  rippleColor: Colors.grey[300]!,
+                  hoverColor: Colors.grey[100]!,
                   gap: 8,
-                  activeColor: Colors.black,
+                  activeColor: Colors.white,
                   iconSize: 24,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   duration: Duration(milliseconds: 400),
-                  tabBackgroundColor: Colors.grey[100]!,
-                  color: AppColors.textPrimary,
+                  tabBackgroundColor: Colors.deepPurpleAccent,
+                  color: Colors.white,
                   tabs: [
-                     GButton(icon: Icons.home, text: 'Home'),
-                     GButton(icon: Icons.heart_broken, text: 'Likes'),
-                     GButton(icon: Icons.search, text: 'Search'),
-                     GButton(icon: Icons.person_2_outlined, text: 'Profile'),
+                    GButton(icon: Icons.home, text: 'Home'),
+                    GButton(icon: Icons.favorite, text: 'Likes'),
+                    GButton(icon: Icons.search, text: 'Search'),
+                    GButton(icon: Icons.person, text: 'Profile'),
                   ],
                   selectedIndex: state.selectedIndex,
                   onTabChange: (index) {
@@ -68,4 +64,3 @@ class CustomBottomNavBar extends StatelessWidget {
     );
   }
 }
-
