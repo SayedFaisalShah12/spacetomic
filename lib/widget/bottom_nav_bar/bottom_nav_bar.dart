@@ -16,9 +16,9 @@ class CustomBottomNavBar extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           backgroundColor: Color(0xFF061A2D),
-          body: AnimatedSwitcher(
-            duration: Duration(milliseconds: 300),
-            child: _widgetOptions[state.selectedIndex],
+          body: IndexedStack(
+            index: state.selectedIndex,
+            children: _widgetOptions,
           ),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(

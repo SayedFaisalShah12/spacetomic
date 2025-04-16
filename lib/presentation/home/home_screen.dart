@@ -4,7 +4,6 @@ import '../../core/constant/app_style.dart';
 import '../../logic/home/home_bloc.dart';
 import '../../logic/home/home_event.dart';
 import '../../logic/home/home_state.dart';
-import '../../widget/bottom_nav_bar/bottom_nav_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -110,7 +109,6 @@ class HomeScreen extends StatelessWidget {
             },
           ),
         ),
-        bottomNavigationBar: CustomBottomNavBar(),
       ),
     );
   }
