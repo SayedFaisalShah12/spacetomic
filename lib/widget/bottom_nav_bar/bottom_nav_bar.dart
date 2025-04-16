@@ -5,6 +5,8 @@ import '../../logic/bottom_nav_bar/navigation_bloc.dart';
 import '../../logic/bottom_nav_bar/navigation_event.dart';
 import '../../logic/bottom_nav_bar/navigation_state.dart';
 import '../../presentation/home/home_screen.dart';
+import '../../presentation/explore/explore_screen.dart';
+import '../../presentation/profile/profile_screen.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   const CustomBottomNavBar({super.key});
@@ -62,7 +64,7 @@ class CustomBottomNavBar extends StatelessWidget {
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    HomeScreen(),
-    HomeScreen(),
+    ExploreScreen(),
+    ProfileScreen(),
   ];
 }
