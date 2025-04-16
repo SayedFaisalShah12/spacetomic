@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import '../../core/models/neows.dart';
 import '../../core/repositories/neo_repository.dart';
+import 'home_event.dart';
+import 'home_state.dart';
 
 // Events
 abstract class HomeEvent extends Equatable {
@@ -13,6 +15,15 @@ abstract class HomeEvent extends Equatable {
 
 class LoadNeowsData extends HomeEvent {
   const LoadNeowsData();
+}
+
+class ChangeCategory extends HomeEvent {
+  final int index;
+
+  const ChangeCategory(this.index);
+
+  @override
+  List<Object?> get props => [index];
 }
 
 // States
@@ -50,8 +61,9 @@ class HomeError extends HomeState {
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final NeoRepository neoRepository;
 
-  HomeBloc({required this.neoRepository}) : super(HomeInitial()) {
+  HomeBloc({required this.neoRepository}) : super(HomeLoading()) {
     on<LoadNeowsData>(_onLoadNeowsData);
+    on<ChangeCategory>(_onChangeCategory);
   }
 
   Future<void> _onLoadNeowsData(
@@ -64,6 +76,18 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(HomeLoaded(neows: neows));
     } catch (e) {
       emit(HomeError(e.toString()));
+    }
+  }
+
+  void _onChangeCategory(ChangeCategory event, Emitter<HomeState> emit) {
+    if (state is HomeLoaded) {
+      final currentState = state as HomeLoaded;
+      emit(
+        HomeLoaded(
+          neows: currentState.neows,
+          selectedCategoryIndex: event.index,
+        ),
+      );
     }
   }
 }

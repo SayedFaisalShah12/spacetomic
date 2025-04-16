@@ -7,4 +7,14 @@ abstract class HomeEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadNeowsData extends HomeEvent {}
+class LoadNeowsData extends HomeEvent {
+  const LoadNeowsData();
+}
+
+class ChangeCategory extends HomeEvent {
+  final int index;
+  const ChangeCategory(this.index);
+
+  @override
+  List<Object?> get props => [index];
+}
