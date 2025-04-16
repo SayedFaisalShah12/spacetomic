@@ -1,140 +1,224 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/constant/app_style.dart';
+import '../../core/services/nasa_api_service.dart';
+import '../../logic/apod/apod_bloc.dart';
+import '../../logic/apod/apod_event.dart';
+import '../../logic/apod/apod_state.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xFF061A2D),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // App Title
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Text(
-                'Spacetomic',
-                style: AppStyle.displayMedium.copyWith(
-                  color: Colors.white,
-                  letterSpacing: 1.2,
+    return BlocProvider(
+      create: (context) => ApodBloc(NasaApiService())..add(LoadApod()),
+      child: Scaffold(
+        backgroundColor: Color(0xFF061A2D),
+        body: SafeArea(
+          child: Column(
+            children: [
+              // App Title
+              Container(
+                padding: EdgeInsets.symmetric(vertical: 16),
+                child: Text(
+                  'Spacetomic',
+                  style: AppStyle.displayMedium.copyWith(
+                    color: Colors.white,
+                    letterSpacing: 1.2,
+                  ),
                 ),
               ),
-            ),
 
-            // Horizontal Menu
-            SizedBox(
-              height: 60,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                itemCount: menuItems.length,
-                itemBuilder: (context, index) {
-                  final item = menuItems[index];
-                  return Container(
-                    margin: EdgeInsets.only(right: 12),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor:
-                            index == 0
-                                ? Colors.deepPurpleAccent
-                                : Color(0xFF0A1F2E),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+              // APOD Section
+              BlocBuilder<ApodBloc, ApodState>(
+                builder: (context, state) {
+                  if (state is ApodLoading) {
+                    return Container(
+                      height: 200,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.deepPurpleAccent,
                         ),
-                        padding: EdgeInsets.symmetric(horizontal: 16),
                       ),
-                      onPressed: () {},
-                      child: Row(
-                        children: [
-                          Icon(item.icon, color: Colors.white70),
-                          SizedBox(width: 8),
-                          Text(
-                            item.title,
-                            style: AppStyle.bodyMedium.copyWith(
-                              color: Colors.white,
-                            ),
+                    );
+                  } else if (state is ApodLoaded) {
+                    return Container(
+                      height: 200,
+                      margin: EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        image: DecorationImage(
+                          image: NetworkImage(state.apod.url),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.7),
+                            ],
                           ),
-                        ],
+                        ),
+                        padding: EdgeInsets.all(16),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'NASA Picture of the Day',
+                              style: AppStyle.titleMedium.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              state.apod.title,
+                              style: AppStyle.bodyMedium.copyWith(
+                                color: Colors.white70,
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  } else if (state is ApodError) {
+                    return Container(
+                      height: 200,
+                      child: Center(
+                        child: Text(
+                          'Error: ${state.message}',
+                          style: AppStyle.bodyMedium.copyWith(
+                            color: Colors.red,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return SizedBox.shrink();
                 },
               ),
-            ),
 
-            // Content List
-            Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.all(16),
-                itemCount: spaceContents.length,
-                itemBuilder: (context, index) {
-                  final content = spaceContents[index];
-                  return Container(
-                    margin: EdgeInsets.only(bottom: 16),
-                    child: Card(
-                      color: Color(0xFF0A1F2E),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(12),
-                            ),
-                            child: Image.asset(
-                              content.imagePath,
-                              width: double.infinity,
-                              height: 200,
-                              fit: BoxFit.cover,
-                            ),
+              // Horizontal Menu
+              Container(
+                height: 60,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: menuItems.length,
+                  itemBuilder: (context, index) {
+                    final item = menuItems[index];
+                    return Container(
+                      margin: EdgeInsets.only(right: 12),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor:
+                              index == 0
+                                  ? Colors.deepPurpleAccent
+                                  : Color(0xFF0A1F2E),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  content.title,
-                                  style: AppStyle.titleLarge.copyWith(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  content.subtitle,
-                                  style: AppStyle.bodyMedium.copyWith(
-                                    color: Colors.white70,
-                                  ),
-                                ),
-                                SizedBox(height: 16),
-                                ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.deepPurpleAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                        onPressed: () {},
+                        child: Row(
+                          children: [
+                            Icon(item.icon, color: Colors.white70),
+                            SizedBox(width: 8),
+                            Text(
+                              item.title,
+                              style: AppStyle.bodyMedium.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              // Content List
+              Expanded(
+                child: ListView.builder(
+                  padding: EdgeInsets.all(16),
+                  itemCount: spaceContents.length,
+                  itemBuilder: (context, index) {
+                    final content = spaceContents[index];
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 16),
+                      child: Card(
+                        color: Color(0xFF0A1F2E),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(12),
+                              ),
+                              child: Image.asset(
+                                content.imagePath,
+                                width: double.infinity,
+                                height: 200,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    content.title,
+                                    style: AppStyle.titleLarge.copyWith(
+                                      color: Colors.white,
                                     ),
                                   ),
-                                  child: Text(
-                                    'Learn More',
-                                    style: AppStyle.bodyMedium,
+                                  SizedBox(height: 8),
+                                  Text(
+                                    content.subtitle,
+                                    style: AppStyle.bodyMedium.copyWith(
+                                      color: Colors.white70,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(height: 16),
+                                  ElevatedButton(
+                                    onPressed: () {},
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.deepPurpleAccent,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'Learn More',
+                                      style: AppStyle.bodyMedium,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
