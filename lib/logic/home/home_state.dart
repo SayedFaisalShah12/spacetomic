@@ -1,8 +1,8 @@
-import 'package:spacetomic/presentation/home/home_screen.dart';
+import '../home/home_bloc.dart';
 
 class HomeState {
   final int selectedCategoryIndex;
-  final List<MenuItemData> menuItems;
+  final List<MenuItem> menuItems;
   final List<SpaceContent> spaceContents;
   final bool isLoading;
   final String? error;
@@ -17,7 +17,7 @@ class HomeState {
 
   HomeState copyWith({
     int? selectedCategoryIndex,
-    List<MenuItemData>? menuItems,
+    List<MenuItem>? menuItems,
     List<SpaceContent>? spaceContents,
     bool? isLoading,
     String? error,
