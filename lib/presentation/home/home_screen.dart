@@ -1,355 +1,169 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/constant/app_style.dart';
-import '../../core/services/nasa_api_service.dart';
-import '../../logic/apod/apod_bloc.dart';
-import '../../logic/apod/apod_event.dart';
-import '../../logic/apod/apod_state.dart';
+import '../../core/models/neows.dart';
+import '../../logic/home/home_bloc.dart'
+    hide HomeState, HomeLoading, HomeError, HomeLoaded, LoadNeowsData;
+import '../../logic/home/home_event.dart';
+import '../../logic/home/home_state.dart';
+import '../../widget/bottom_nav_bar/bottom_nav_bar.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  int selectedMenuIndex = 0;
-  late ApodBloc _apodBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _apodBloc = ApodBloc(NasaApiService());
-  }
-
-  @override
-  void dispose() {
-    _apodBloc.close();
-    super.dispose();
-  }
-
-  Widget _buildApodImage(String imageUrl) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: Image.network(
-        imageUrl,
-        width: double.infinity,
-        height: 300,
-        fit: BoxFit.cover,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return Container(
-            width: double.infinity,
-            height: 300,
-            color: Color(0xFF0A1F2E),
-            child: Center(
-              child: CircularProgressIndicator(
-                value:
-                    loadingProgress.expectedTotalBytes != null
-                        ? loadingProgress.cumulativeBytesLoaded /
-                            loadingProgress.expectedTotalBytes!
-                        : null,
-                color: Colors.deepPurpleAccent,
-              ),
-            ),
-          );
-        },
-        errorBuilder: (context, error, stackTrace) {
-          print('Error loading image: $error');
-          return Container(
-            width: double.infinity,
-            height: 300,
-            color: Color(0xFF0A1F2E),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.error_outline, color: Colors.red, size: 48),
-                SizedBox(height: 16),
-                Text(
-                  'Failed to load image',
-                  style: AppStyle.bodyMedium.copyWith(color: Colors.red),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+  Widget build(BuildContext context) {
+    return BlocProvider<HomeBloc>(
+      create: (context) => context.read<HomeBloc>()..add(const LoadNeowsData()),
+      child: const CustomBottomNavBar(),
     );
   }
+}
+
+class HomeContent extends StatelessWidget {
+  const HomeContent({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: _apodBloc,
-      child: Scaffold(
-        backgroundColor: Color(0xFF061A2D),
-        body: SafeArea(
-          child: Column(
-            children: [
-              // App Title
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Text(
-                  'Spacetomic',
-                  style: AppStyle.displayMedium.copyWith(
-                    color: Colors.white,
-                    letterSpacing: 1.2,
-                  ),
-                ),
-              ),
+    return BlocBuilder<HomeBloc, HomeState>(
+      builder: (context, currentState) {
+        if (currentState is HomeLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-              // Horizontal Menu
-              Container(
-                height: 60,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: menuItems.length,
-                  itemBuilder: (context, index) {
-                    final item = menuItems[index];
-                    return Container(
-                      margin: EdgeInsets.only(right: 12),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              index == selectedMenuIndex
-                                  ? Colors.deepPurpleAccent
-                                  : Color(0xFF0A1F2E),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            selectedMenuIndex = index;
-                          });
-                          if (item.title == 'APOD') {
-                            _apodBloc.add(LoadApod());
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Icon(item.icon, color: Colors.white70),
-                            SizedBox(width: 8),
-                            Text(
-                              item.title,
-                              style: AppStyle.bodyMedium.copyWith(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
+        if (currentState is HomeError) {
+          return Center(child: Text('Error: ${currentState.message}'));
+        }
+
+        if (currentState is HomeLoaded) {
+          return _buildContent(context, currentState.neows);
+        }
+
+        return const SizedBox.shrink();
+      },
+    );
+  }
+
+  Widget _buildContent(BuildContext context, Neows neows) {
+    final neos = neows.nearEarthObjects ?? [];
+
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Spacetomic',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.search, color: Colors.white),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 50,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  final categories = [
+                    'All',
+                    'Planets',
+                    'Stars',
+                    'Galaxies',
+                    'Missions',
+                  ];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            index == 0 ? Colors.blue : Colors.grey[800],
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                    );
-                  },
-                ),
+                      child: Text(
+                        categories[index],
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  );
+                },
               ),
-
-              // Content Area
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.all(16),
-                  child: Builder(
-                    builder: (context) {
-                      if (menuItems[selectedMenuIndex].title == 'APOD') {
-                        return BlocBuilder<ApodBloc, ApodState>(
-                          builder: (context, state) {
-                            if (state is ApodLoading) {
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.deepPurpleAccent,
-                                ),
-                              );
-                            } else if (state is ApodLoaded) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  _buildApodImage(
-                                    state.apod.hdurl ?? state.apod.url,
-                                  ),
-                                  SizedBox(height: 16),
-                                  Text(
-                                    state.apod.title,
-                                    style: AppStyle.titleLarge.copyWith(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    state.apod.date,
-                                    style: AppStyle.bodyMedium.copyWith(
-                                      color: Colors.white70,
-                                    ),
-                                  ),
-                                  SizedBox(height: 16),
-                                  Expanded(
-                                    child: SingleChildScrollView(
-                                      child: Text(
-                                        state.apod.explanation,
-                                        style: AppStyle.bodyMedium.copyWith(
-                                          color: Colors.white70,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            } else if (state is ApodError) {
-                              return Center(
-                                child: Text(
-                                  'Error: ${state.message}',
-                                  style: AppStyle.bodyMedium.copyWith(
-                                    color: Colors.red,
-                                  ),
-                                ),
-                              );
-                            }
-                            return Center(
-                              child: Text(
-                                'Select APOD to view NASA\'s Astronomy Picture of the Day',
-                                style: AppStyle.bodyMedium.copyWith(
-                                  color: Colors.white70,
-                                ),
-                                textAlign: TextAlign.center,
+            ),
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(16.0),
+                itemCount: neos.length,
+                itemBuilder: (context, index) {
+                  final neo = neos[index];
+                  return Card(
+                    color: Colors.grey[900],
+                    margin: const EdgeInsets.only(bottom: 16.0),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            neo.name ?? 'Unknown Object',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Designation: ${neo.designation ?? 'N/A'}',
+                            style: TextStyle(color: Colors.grey[400]),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Hazardous: ${neo.isPotentiallyHazardousAsteroid ?? false ? 'Yes' : 'No'}',
+                            style: TextStyle(color: Colors.grey[400]),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Absolute Magnitude: ${neo.absoluteMagnitudeH ?? 'N/A'}',
+                            style: TextStyle(color: Colors.grey[400]),
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () {
+                              // TODO: Implement details navigation
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
                               ),
-                            );
-                          },
-                        );
-                      } else {
-                        // Original content list for other menu items
-                        return ListView.builder(
-                          itemCount: spaceContents.length,
-                          itemBuilder: (context, index) {
-                            final content = spaceContents[index];
-                            return Container(
-                              margin: EdgeInsets.only(bottom: 16),
-                              child: Card(
-                                color: Color(0xFF0A1F2E),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ClipRRect(
-                                      borderRadius: BorderRadius.vertical(
-                                        top: Radius.circular(12),
-                                      ),
-                                      child: Image.asset(
-                                        content.imagePath,
-                                        width: double.infinity,
-                                        height: 200,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(16),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            content.title,
-                                            style: AppStyle.titleLarge.copyWith(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          SizedBox(height: 8),
-                                          Text(
-                                            content.subtitle,
-                                            style: AppStyle.bodyMedium.copyWith(
-                                              color: Colors.white70,
-                                            ),
-                                          ),
-                                          SizedBox(height: 16),
-                                          ElevatedButton(
-                                            onPressed: () {},
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  Colors.deepPurpleAccent,
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                              ),
-                                            ),
-                                            child: Text(
-                                              'Learn More',
-                                              style: AppStyle.bodyMedium,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        );
-                      }
-                    },
-                  ),
-                ),
+                            ),
+                            child: const Text('Learn More'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
-
-class MenuItem {
-  final String title;
-  final IconData icon;
-
-  const MenuItem({required this.title, required this.icon});
-}
-
-class SpaceContent {
-  final String title;
-  final String subtitle;
-  final String imagePath;
-
-  const SpaceContent({
-    required this.title,
-    required this.subtitle,
-    required this.imagePath,
-  });
-}
-
-final List<MenuItem> menuItems = [
-  MenuItem(title: 'All', icon: Icons.all_inclusive),
-  MenuItem(title: 'APOD', icon: Icons.star),
-  MenuItem(title: 'Planets', icon: Icons.public),
-  MenuItem(title: 'Galaxies', icon: Icons.blur_circular),
-  MenuItem(title: 'Missions', icon: Icons.rocket_launch),
-];
-
-final List<SpaceContent> spaceContents = [
-  SpaceContent(
-    title: 'The James Webb Space Telescope',
-    subtitle:
-        'Discover the latest images and findings from NASA\'s most powerful space telescope.',
-    imagePath: 'assets/images/astronaut.png',
-  ),
-  SpaceContent(
-    title: 'Mars Exploration',
-    subtitle:
-        'Follow the journey of Perseverance rover and its search for signs of ancient life.',
-    imagePath: 'assets/images/astronaut.png',
-  ),
-  SpaceContent(
-    title: 'Black Holes',
-    subtitle:
-        'Explore the mysteries of these cosmic phenomena that warp space and time.',
-    imagePath: 'assets/images/astronaut.png',
-  ),
-  SpaceContent(
-    title: 'International Space Station',
-    subtitle: 'Learn about life in space and ongoing research aboard the ISS.',
-    imagePath: 'assets/images/astronaut.png',
-  ),
-];
