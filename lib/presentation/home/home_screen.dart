@@ -6,13 +6,82 @@ import '../../logic/apod/apod_bloc.dart';
 import '../../logic/apod/apod_event.dart';
 import '../../logic/apod/apod_state.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int selectedMenuIndex = 0;
+  late ApodBloc _apodBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _apodBloc = ApodBloc(NasaApiService());
+  }
+
+  @override
+  void dispose() {
+    _apodBloc.close();
+    super.dispose();
+  }
+
+  Widget _buildApodImage(String imageUrl) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: Image.network(
+        imageUrl,
+        width: double.infinity,
+        height: 300,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return Container(
+            width: double.infinity,
+            height: 300,
+            color: Color(0xFF0A1F2E),
+            child: Center(
+              child: CircularProgressIndicator(
+                value:
+                    loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                color: Colors.deepPurpleAccent,
+              ),
+            ),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          print('Error loading image: $error');
+          return Container(
+            width: double.infinity,
+            height: 300,
+            color: Color(0xFF0A1F2E),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.error_outline, color: Colors.red, size: 48),
+                SizedBox(height: 16),
+                Text(
+                  'Failed to load image',
+                  style: AppStyle.bodyMedium.copyWith(color: Colors.red),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ApodBloc(NasaApiService())..add(LoadApod()),
+    return BlocProvider.value(
+      value: _apodBloc,
       child: Scaffold(
         backgroundColor: Color(0xFF061A2D),
         body: SafeArea(
@@ -30,82 +99,6 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
-              // APOD Section
-              BlocBuilder<ApodBloc, ApodState>(
-                builder: (context, state) {
-                  if (state is ApodLoading) {
-                    return Container(
-                      height: 200,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.deepPurpleAccent,
-                        ),
-                      ),
-                    );
-                  } else if (state is ApodLoaded) {
-                    return Container(
-                      height: 200,
-                      margin: EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        image: DecorationImage(
-                          image: NetworkImage(state.apod.url),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              Colors.transparent,
-                              Colors.black.withOpacity(0.7),
-                            ],
-                          ),
-                        ),
-                        padding: EdgeInsets.all(16),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'NASA Picture of the Day',
-                              style: AppStyle.titleMedium.copyWith(
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Text(
-                              state.apod.title,
-                              style: AppStyle.bodyMedium.copyWith(
-                                color: Colors.white70,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  } else if (state is ApodError) {
-                    return Container(
-                      height: 200,
-                      child: Center(
-                        child: Text(
-                          'Error: ${state.message}',
-                          style: AppStyle.bodyMedium.copyWith(
-                            color: Colors.red,
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                  return SizedBox.shrink();
-                },
-              ),
-
               // Horizontal Menu
               Container(
                 height: 60,
@@ -120,7 +113,7 @@ class HomeScreen extends StatelessWidget {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              index == 0
+                              index == selectedMenuIndex
                                   ? Colors.deepPurpleAccent
                                   : Color(0xFF0A1F2E),
                           shape: RoundedRectangleBorder(
@@ -128,7 +121,14 @@ class HomeScreen extends StatelessWidget {
                           ),
                           padding: EdgeInsets.symmetric(horizontal: 16),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+                          setState(() {
+                            selectedMenuIndex = index;
+                          });
+                          if (item.title == 'APOD') {
+                            _apodBloc.add(LoadApod());
+                          }
+                        },
                         child: Row(
                           children: [
                             Icon(item.icon, color: Colors.white70),
@@ -147,74 +147,150 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
 
-              // Content List
+              // Content Area
               Expanded(
-                child: ListView.builder(
+                child: Padding(
                   padding: EdgeInsets.all(16),
-                  itemCount: spaceContents.length,
-                  itemBuilder: (context, index) {
-                    final content = spaceContents[index];
-                    return Container(
-                      margin: EdgeInsets.only(bottom: 16),
-                      child: Card(
-                        color: Color(0xFF0A1F2E),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.vertical(
-                                top: Radius.circular(12),
-                              ),
-                              child: Image.asset(
-                                content.imagePath,
-                                width: double.infinity,
-                                height: 200,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
+                  child: Builder(
+                    builder: (context) {
+                      if (menuItems[selectedMenuIndex].title == 'APOD') {
+                        return BlocBuilder<ApodBloc, ApodState>(
+                          builder: (context, state) {
+                            if (state is ApodLoading) {
+                              return Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.deepPurpleAccent,
+                                ),
+                              );
+                            } else if (state is ApodLoaded) {
+                              return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  _buildApodImage(
+                                    state.apod.hdurl ?? state.apod.url,
+                                  ),
+                                  SizedBox(height: 16),
                                   Text(
-                                    content.title,
+                                    state.apod.title,
                                     style: AppStyle.titleLarge.copyWith(
                                       color: Colors.white,
                                     ),
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    content.subtitle,
+                                    state.apod.date,
                                     style: AppStyle.bodyMedium.copyWith(
                                       color: Colors.white70,
                                     ),
                                   ),
                                   SizedBox(height: 16),
-                                  ElevatedButton(
-                                    onPressed: () {},
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.deepPurpleAccent,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20),
+                                  Expanded(
+                                    child: SingleChildScrollView(
+                                      child: Text(
+                                        state.apod.explanation,
+                                        style: AppStyle.bodyMedium.copyWith(
+                                          color: Colors.white70,
+                                        ),
                                       ),
-                                    ),
-                                    child: Text(
-                                      'Learn More',
-                                      style: AppStyle.bodyMedium,
                                     ),
                                   ),
                                 ],
+                              );
+                            } else if (state is ApodError) {
+                              return Center(
+                                child: Text(
+                                  'Error: ${state.message}',
+                                  style: AppStyle.bodyMedium.copyWith(
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              );
+                            }
+                            return Center(
+                              child: Text(
+                                'Select APOD to view NASA\'s Astronomy Picture of the Day',
+                                style: AppStyle.bodyMedium.copyWith(
+                                  color: Colors.white70,
+                                ),
+                                textAlign: TextAlign.center,
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
+                            );
+                          },
+                        );
+                      } else {
+                        // Original content list for other menu items
+                        return ListView.builder(
+                          itemCount: spaceContents.length,
+                          itemBuilder: (context, index) {
+                            final content = spaceContents[index];
+                            return Container(
+                              margin: EdgeInsets.only(bottom: 16),
+                              child: Card(
+                                color: Color(0xFF0A1F2E),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(12),
+                                      ),
+                                      child: Image.asset(
+                                        content.imagePath,
+                                        width: double.infinity,
+                                        height: 200,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            content.title,
+                                            style: AppStyle.titleLarge.copyWith(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          SizedBox(height: 8),
+                                          Text(
+                                            content.subtitle,
+                                            style: AppStyle.bodyMedium.copyWith(
+                                              color: Colors.white70,
+                                            ),
+                                          ),
+                                          SizedBox(height: 16),
+                                          ElevatedButton(
+                                            onPressed: () {},
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  Colors.deepPurpleAccent,
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              'Learn More',
+                                              style: AppStyle.bodyMedium,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
             ],
@@ -246,8 +322,8 @@ class SpaceContent {
 
 final List<MenuItem> menuItems = [
   MenuItem(title: 'All', icon: Icons.all_inclusive),
+  MenuItem(title: 'APOD', icon: Icons.star),
   MenuItem(title: 'Planets', icon: Icons.public),
-  MenuItem(title: 'Stars', icon: Icons.star),
   MenuItem(title: 'Galaxies', icon: Icons.blur_circular),
   MenuItem(title: 'Missions', icon: Icons.rocket_launch),
 ];

@@ -12,12 +12,22 @@ class NasaApiService {
         Uri.parse('$_baseUrl/planetary/apod?api_key=$_apiKey'),
       );
 
+      print('APOD API Response Status: ${response.statusCode}');
+      print('APOD API Response Body: ${response.body}');
+
       if (response.statusCode == 200) {
-        return APOD.fromJson(json.decode(response.body));
+        final data = json.decode(response.body);
+        if (data['url'] == null) {
+          throw Exception('No image URL in the response');
+        }
+        return APOD.fromJson(data);
       } else {
-        throw Exception('Failed to load APOD: ${response.statusCode}');
+        throw Exception(
+          'Failed to load APOD: ${response.statusCode} - ${response.body}',
+        );
       }
     } catch (e) {
+      print('Error fetching APOD: $e');
       throw Exception('Failed to load APOD: $e');
     }
   }
