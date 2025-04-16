@@ -119,31 +119,31 @@ final List<ExploreItem> exploreItems = [
   ExploreItem(
     title: 'Solar System',
     subtitle: 'Explore our cosmic neighborhood',
-    imagePath: 'assets/images/solar_system.jpg',
+    imagePath: 'assets/images/astronaut.png',
   ),
   ExploreItem(
     title: 'Exoplanets',
     subtitle: 'Worlds beyond our solar system',
-    imagePath: 'assets/images/exoplanet.jpg',
+    imagePath: 'assets/images/astronaut.png',
   ),
   ExploreItem(
     title: 'Nebulae',
     subtitle: 'Cosmic clouds of gas and dust',
-    imagePath: 'assets/images/nebula.jpg',
+    imagePath: 'assets/images/astronaut.png',
   ),
   ExploreItem(
     title: 'Space Technology',
     subtitle: 'Latest innovations in space exploration',
-    imagePath: 'assets/images/space_tech.jpg',
+    imagePath: 'assets/images/astronaut.png',
   ),
   ExploreItem(
     title: 'Astronomy',
     subtitle: 'Study of celestial objects',
-    imagePath: 'assets/images/astronomy.jpg',
+    imagePath: 'assets/images/astronaut.png',
   ),
   ExploreItem(
     title: 'Space History',
     subtitle: 'Milestones in space exploration',
-    imagePath: 'assets/images/space_history.jpg',
+    imagePath: 'assets/images/astronaut.png',
   ),
 ];
