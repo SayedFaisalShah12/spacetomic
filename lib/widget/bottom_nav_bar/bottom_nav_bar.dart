@@ -23,7 +23,7 @@ class CustomBottomNavBar extends StatelessWidget {
           ),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
-              color: Color(0xFF061A2D),
+              color: Color(0xFF0A1F2E),
               boxShadow: [
                 BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1)),
               ],
@@ -35,19 +35,41 @@ class CustomBottomNavBar extends StatelessWidget {
                   vertical: 8,
                 ),
                 child: GNav(
-                  rippleColor: Colors.grey[300]!,
-                  hoverColor: Colors.grey[100]!,
+                  backgroundColor: Color(0xFF0A1F2E),
+                  rippleColor: Colors.deepPurpleAccent.withOpacity(0.3),
+                  hoverColor: Colors.deepPurpleAccent.withOpacity(0.1),
                   gap: 8,
                   activeColor: Colors.white,
                   iconSize: 24,
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   duration: Duration(milliseconds: 400),
-                  tabBackgroundColor: Colors.deepPurpleAccent,
+                  tabBackgroundColor: Colors.deepPurpleAccent.withOpacity(0.2),
                   color: Colors.white70,
                   tabs: [
-                    GButton(icon: Icons.home, text: 'Home'),
-                    GButton(icon: Icons.explore, text: 'Explore'),
-                    GButton(icon: Icons.person, text: 'Profile'),
+                    GButton(
+                      icon: Icons.home,
+                      text: 'Home',
+                      textStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    GButton(
+                      icon: Icons.explore,
+                      text: 'Explore',
+                      textStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    GButton(
+                      icon: Icons.person,
+                      text: 'Profile',
+                      textStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                   ],
                   selectedIndex: state.selectedIndex,
                   onTabChange: (index) {

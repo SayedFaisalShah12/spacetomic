@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
             ),
 
             // Horizontal Menu
-            Container(
+            SizedBox(
               height: 60,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -173,23 +173,23 @@ final List<SpaceContent> spaceContents = [
     title: 'The James Webb Space Telescope',
     subtitle:
         'Discover the latest images and findings from NASA\'s most powerful space telescope.',
-    imagePath: 'assets/images/webb_telescope.jpg',
+    imagePath: 'assets/images/astronaut.png',
   ),
   SpaceContent(
     title: 'Mars Exploration',
     subtitle:
         'Follow the journey of Perseverance rover and its search for signs of ancient life.',
-    imagePath: 'assets/images/mars_rover.jpg',
+    imagePath: 'assets/images/astronaut.png',
   ),
   SpaceContent(
     title: 'Black Holes',
     subtitle:
         'Explore the mysteries of these cosmic phenomena that warp space and time.',
-    imagePath: 'assets/images/black_hole.jpg',
+    imagePath: 'assets/images/astronaut.png',
   ),
   SpaceContent(
     title: 'International Space Station',
     subtitle: 'Learn about life in space and ongoing research aboard the ISS.',
-    imagePath: 'assets/images/iss.jpg',
+    imagePath: 'assets/images/astronaut.png',
   ),
 ];
