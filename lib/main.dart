@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spacetomic/logic/bottom_nav_bar/navigation_bloc.dart';
 import 'package:spacetomic/presentation/home/home_screen.dart';
 import 'package:spacetomic/presentation/onboarding/onboarding_screen.dart';
+import 'package:spacetomic/presentation/root_screen.dart';
 import 'package:spacetomic/presentation/splash/splash_screen.dart';
 
 void main() {
@@ -31,9 +32,9 @@ class MyApp extends StatelessWidget {
         ),
         initialRoute: '/splash',
         routes: {
-          '/splash': (context) => SplashScreen(),
-          '/onboarding': (context) => OnboardingScreen(),
-          '/home': (context) => HomeScreen(),
+          '/splash': (context) => const SplashScreen(),
+          '/onboarding': (context) => const OnboardingScreen(),
+          '/home': (context) => const RootScreen(),
         },
       ),
     );
