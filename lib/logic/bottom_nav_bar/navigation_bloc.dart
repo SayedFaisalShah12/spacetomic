@@ -5,7 +5,9 @@ import 'navigation_state.dart';
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   NavigationBloc() : super(const NavigationState(0)) {
     on<ChangeTab>((event, emit) {
-      emit(NavigationState(event.index));
+      if (event.index != state.selectedIndex) {
+        emit(NavigationState(event.index));
+      }
     });
   }
 }

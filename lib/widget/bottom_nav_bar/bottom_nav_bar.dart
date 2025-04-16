@@ -8,12 +8,18 @@ import '../../presentation/home/home_screen.dart';
 import '../../presentation/settings/settings_screen.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
+  const CustomBottomNavBar({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return Scaffold(
-          body: _widgetOptions[state.selectedIndex],
+          backgroundColor: Color(0xFF061A2D),
+          body: AnimatedSwitcher(
+            duration: Duration(milliseconds: 300),
+            child: _widgetOptions[state.selectedIndex],
+          ),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
               color: Color(0xFF061A2D),
@@ -57,9 +63,12 @@ class CustomBottomNavBar extends StatelessWidget {
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    HomeScreen(),
+    Center(
+      child: Text(
+        'Explore Screen',
+        style: TextStyle(color: Colors.white, fontSize: 24),
+      ),
+    ),
     SettingsScreen(),
   ];
-
-  const CustomBottomNavBar({super.key});
 }
