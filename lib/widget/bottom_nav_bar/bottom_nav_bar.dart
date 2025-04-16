@@ -5,7 +5,6 @@ import '../../logic/bottom_nav_bar/navigation_bloc.dart';
 import '../../logic/bottom_nav_bar/navigation_event.dart';
 import '../../logic/bottom_nav_bar/navigation_state.dart';
 import '../../presentation/home/home_screen.dart';
-import '../../presentation/settings/settings_screen.dart';
 
 class CustomBottomNavBar extends StatelessWidget {
   const CustomBottomNavBar({super.key});
@@ -46,7 +45,7 @@ class CustomBottomNavBar extends StatelessWidget {
                   tabs: [
                     GButton(icon: Icons.home, text: 'Home'),
                     GButton(icon: Icons.explore, text: 'Explore'),
-                    GButton(icon: Icons.settings, text: 'Settings'),
+                    GButton(icon: Icons.person, text: 'Profile'),
                   ],
                   selectedIndex: state.selectedIndex,
                   onTabChange: (index) {
@@ -63,12 +62,7 @@ class CustomBottomNavBar extends StatelessWidget {
 
   static final List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    Center(
-      child: Text(
-        'Explore Screen',
-        style: TextStyle(color: Colors.white, fontSize: 24),
-      ),
-    ),
-    SettingsScreen(),
+    HomeScreen(),
+    HomeScreen(),
   ];
 }

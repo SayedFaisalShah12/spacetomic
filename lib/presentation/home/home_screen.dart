@@ -1,58 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/constant/app_style.dart';
-import '../../logic/home/home_bloc.dart';
-import '../../logic/home/home_event.dart';
-import '../../logic/home/home_state.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => HomeBloc()..add(LoadHomeContent()),
-      child: Scaffold(
-        backgroundColor: Color(0xFF061A2D),
-        body: SafeArea(
-          child: BlocBuilder<HomeBloc, HomeState>(
-            builder: (context, state) {
-              if (state.error != null) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Error: ${state.error}',
-                        style: AppStyle.bodyMedium.copyWith(color: Colors.red),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          context.read<HomeBloc>().add(LoadHomeContent());
-                        },
-                        child: Text('Retry', style: AppStyle.bodyMedium),
-                      ),
-                    ],
-                  ),
-                );
-              }
+    return Scaffold(
+      backgroundColor: Color(0xFF061A2D),
+      body: SafeArea(
+        child: Column(
+          children: [
+            // App Title
+            Container(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Text(
+                'Spacetomic',
+                style: AppStyle.displayMedium.copyWith(
+                  color: Colors.white,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ),
 
-              if (state.isLoading && state.menuItems.isEmpty) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.deepPurpleAccent,
-                  ),
-                );
-              }
-
-              return ListView.builder(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                itemCount: 12,
+            // Horizontal Menu
+            Container(
+              height: 60,
+              child: ListView.builder(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                itemCount: menuItems.length,
                 itemBuilder: (context, index) {
+                  final item = menuItems[index];
                   return Container(
-                    margin: EdgeInsets.only(bottom: 12),
+                    margin: EdgeInsets.only(right: 12),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor:
@@ -60,54 +41,100 @@ class HomeScreen extends StatelessWidget {
                                 ? Colors.deepPurpleAccent
                                 : Color(0xFF0A1F2E),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(20),
                         ),
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 12,
-                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 16),
                       ),
                       onPressed: () {},
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            children: [
-                              Icon(Icons.home, color: Colors.white, size: 24),
-                              SizedBox(width: 12),
-                              Text(
-                                'Home',
-                                style: AppStyle.bodyMedium.copyWith(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.explore,
-                                color: Colors.white70,
-                                size: 20,
-                              ),
-                              SizedBox(width: 16),
-                              Icon(
-                                Icons.settings,
-                                color: Colors.white70,
-                                size: 20,
-                              ),
-                            ],
+                          Icon(item.icon, color: Colors.white70),
+                          SizedBox(width: 8),
+                          Text(
+                            item.title,
+                            style: AppStyle.bodyMedium.copyWith(
+                              color: Colors.white,
+                            ),
                           ),
                         ],
                       ),
                     ),
                   );
                 },
-              );
-            },
-          ),
+              ),
+            ),
+
+            // Content List
+            Expanded(
+              child: ListView.builder(
+                padding: EdgeInsets.all(16),
+                itemCount: spaceContents.length,
+                itemBuilder: (context, index) {
+                  final content = spaceContents[index];
+                  return Container(
+                    margin: EdgeInsets.only(bottom: 16),
+                    child: Card(
+                      color: Color(0xFF0A1F2E),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.vertical(
+                              top: Radius.circular(12),
+                            ),
+                            child: Image.asset(
+                              content.imagePath,
+                              width: double.infinity,
+                              height: 200,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  content.title,
+                                  style: AppStyle.titleLarge.copyWith(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  content.subtitle,
+                                  style: AppStyle.bodyMedium.copyWith(
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                                SizedBox(height: 16),
+                                ElevatedButton(
+                                  onPressed: () {},
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.deepPurpleAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'Learn More',
+                                    style: AppStyle.bodyMedium,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -133,10 +160,13 @@ class SpaceContent {
   });
 }
 
-final List<MenuItem> menuItems = List.generate(
-  12,
-  (index) => MenuItem(title: 'Home', icon: Icons.home),
-);
+final List<MenuItem> menuItems = [
+  MenuItem(title: 'All', icon: Icons.all_inclusive),
+  MenuItem(title: 'Planets', icon: Icons.public),
+  MenuItem(title: 'Stars', icon: Icons.star),
+  MenuItem(title: 'Galaxies', icon: Icons.blur_circular),
+  MenuItem(title: 'Missions', icon: Icons.rocket_launch),
+];
 
 final List<SpaceContent> spaceContents = [
   SpaceContent(
