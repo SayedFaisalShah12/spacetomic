@@ -10,112 +10,52 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFF061A2D),
       body: SafeArea(
-        child: Column(
-          children: [
-            // Horizontal Menu
-            Container(
-              height: 60,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                itemCount: menuItems.length,
-                itemBuilder: (context, index) {
-                  final item = menuItems[index];
-                  return Container(
-                    margin: EdgeInsets.only(right: 12),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFF0A1F2E),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+        child: ListView.builder(
+          padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+          itemCount: menuItems.length,
+          itemBuilder: (context, index) {
+            final item = menuItems[index];
+            return Container(
+              margin: EdgeInsets.only(bottom: 12),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      index == 0 ? Colors.deepPurpleAccent : Color(0xFF0A1F2E),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                ),
+                onPressed: () {},
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.home, color: Colors.white, size: 24),
+                        SizedBox(width: 12),
+                        Text(
+                          'Home',
+                          style: AppStyle.bodyMedium.copyWith(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                      ),
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(item.icon, color: Colors.white70),
-                          SizedBox(width: 8),
-                          Text(item.title, style: AppStyle.bodyMedium),
-                        ],
-                      ),
+                      ],
                     ),
-                  );
-                },
-              ),
-            ),
-
-            // Content List
-            Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.all(16),
-                itemCount: spaceContents.length,
-                itemBuilder: (context, index) {
-                  final content = spaceContents[index];
-                  return Container(
-                    margin: EdgeInsets.only(bottom: 16),
-                    child: Card(
-                      color: Color(0xFF0A1F2E),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(12),
-                            ),
-                            child: Image.asset(
-                              content.imagePath,
-                              width: double.infinity,
-                              height: 200,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  content.title,
-                                  style: AppStyle.titleLarge.copyWith(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  content.subtitle,
-                                  style: AppStyle.bodyMedium.copyWith(
-                                    color: Colors.white70,
-                                  ),
-                                ),
-                                SizedBox(height: 16),
-                                ElevatedButton(
-                                  onPressed: () {},
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.deepPurpleAccent,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                  ),
-                                  child: Text(
-                                    'Learn More',
-                                    style: AppStyle.bodyMedium,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                    Row(
+                      children: [
+                        Icon(Icons.explore, color: Colors.white70, size: 20),
+                        SizedBox(width: 16),
+                        Icon(Icons.settings, color: Colors.white70, size: 20),
+                      ],
                     ),
-                  );
-                },
+                  ],
+                ),
               ),
-            ),
-          ],
+            );
+          },
         ),
       ),
       bottomNavigationBar: CustomBottomNavBar(),
@@ -142,13 +82,10 @@ class SpaceContent {
   });
 }
 
-final List<MenuItem> menuItems = [
-  MenuItem(title: 'All', icon: Icons.all_inclusive),
-  MenuItem(title: 'Planets', icon: Icons.public),
-  MenuItem(title: 'Stars', icon: Icons.star),
-  MenuItem(title: 'Galaxies', icon: Icons.blur_circular),
-  MenuItem(title: 'Missions', icon: Icons.rocket_launch),
-];
+final List<MenuItem> menuItems = List.generate(
+  12,
+  (index) => MenuItem(title: 'Home', icon: Icons.home),
+);
 
 final List<SpaceContent> spaceContents = [
   SpaceContent(
