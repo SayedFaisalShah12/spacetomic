@@ -16,14 +16,14 @@ class CustomBottomNavBar extends StatelessWidget {
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: Color(0xFF061A2D),
+          backgroundColor: const Color(0xFF061A2D),
           body: IndexedStack(
             index: state.selectedIndex,
-            children: _widgetOptions,
+            children: const [HomeScreen(), ExploreScreen(), ProfileScreen()],
           ),
           bottomNavigationBar: Container(
             decoration: BoxDecoration(
-              color: Color(0xFF0A1F2E),
+              color: const Color(0xFF0A1F2E),
               boxShadow: [
                 BoxShadow(blurRadius: 20, color: Colors.black.withOpacity(.1)),
               ],
@@ -35,17 +35,20 @@ class CustomBottomNavBar extends StatelessWidget {
                   vertical: 8,
                 ),
                 child: GNav(
-                  backgroundColor: Color(0xFF0A1F2E),
+                  backgroundColor: const Color(0xFF0A1F2E),
                   rippleColor: Colors.deepPurpleAccent.withOpacity(0.3),
                   hoverColor: Colors.deepPurpleAccent.withOpacity(0.1),
                   gap: 8,
                   activeColor: Colors.white,
                   iconSize: 24,
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                  duration: Duration(milliseconds: 400),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 12,
+                  ),
+                  duration: const Duration(milliseconds: 400),
                   tabBackgroundColor: Colors.deepPurpleAccent.withOpacity(0.2),
                   color: Colors.white70,
-                  tabs: [
+                  tabs: const [
                     GButton(
                       icon: Icons.home,
                       text: 'Home',
@@ -83,10 +86,4 @@ class CustomBottomNavBar extends StatelessWidget {
       },
     );
   }
-
-  static final List<Widget> _widgetOptions = <Widget>[
-    HomeScreen(),
-    ExploreScreen(),
-    ProfileScreen(),
-  ];
 }
