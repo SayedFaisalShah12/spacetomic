@@ -13,7 +13,7 @@ class ApodInitial extends ApodState {}
 class ApodLoading extends ApodState {}
 
 class ApodLoaded extends ApodState {
-  final APOD apod;
+  final Apod apod;
 
   const ApodLoaded(this.apod);
 

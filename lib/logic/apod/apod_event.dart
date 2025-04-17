@@ -7,4 +7,6 @@ abstract class ApodEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class LoadApod extends ApodEvent {}
+class LoadApod extends ApodEvent {
+  const LoadApod();
+}

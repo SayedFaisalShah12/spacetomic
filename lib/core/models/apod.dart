@@ -1,47 +1,35 @@
-class APOD {
-  final String? copyright;
-  final String date;
-  final String explanation;
-  final String? hdurl;
-  final String mediaType;
-  final String serviceVersion;
+class Apod {
   final String title;
+  final String explanation;
   final String url;
+  final String mediaType;
+  final String date;
 
-  APOD({
-    this.copyright,
-    required this.date,
-    required this.explanation,
-    this.hdurl,
-    required this.mediaType,
-    required this.serviceVersion,
+  Apod({
     required this.title,
+    required this.explanation,
     required this.url,
+    required this.mediaType,
+    required this.date,
   });
 
-  factory APOD.fromJson(Map<String, dynamic> json) {
-    return APOD(
-      copyright: json['copyright'],
-      date: json['date'],
-      explanation: json['explanation'],
-      hdurl: json['hdurl'],
-      mediaType: json['media_type'],
-      serviceVersion: json['service_version'],
-      title: json['title'],
-      url: json['url'],
+  factory Apod.fromJson(Map<String, dynamic> json) {
+    return Apod(
+      title: json['title'] as String,
+      explanation: json['explanation'] as String,
+      url: json['url'] as String,
+      mediaType: json['media_type'] as String,
+      date: json['date'] as String,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'copyright': copyright,
-      'date': date,
-      'explanation': explanation,
-      'hdurl': hdurl,
-      'media_type': mediaType,
-      'service_version': serviceVersion,
       'title': title,
+      'explanation': explanation,
       'url': url,
+      'media_type': mediaType,
+      'date': date,
     };
   }
 }
