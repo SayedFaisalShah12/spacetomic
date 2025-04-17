@@ -4,6 +4,7 @@ import '../../logic/home/home_bloc.dart';
 import '../../widget/bottom_nav_bar/bottom_nav_bar.dart';
 import '../../core/repositories/neo_repository.dart';
 import '../../core/services/neo_api_service.dart';
+import '../../core/models/neows.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -87,6 +88,61 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
                   ),
+                  if (state is HomeLoaded && state.selectedCategoryIndex == 0)
+                    SizedBox(
+                      height: 120,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: state.neows.nearEarthObjects?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          final neo = state.neows.nearEarthObjects![index];
+                          return Container(
+                            width: 200,
+                            margin: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(12.0),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF1E1E1E),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  neo.name ?? 'Unknown NEO',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Diameter: ${neo.estimatedDiameter?.kilometers?.estimatedDiameterMax?.toStringAsFixed(2) ?? 'Unknown'} km',
+                                  style: const TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'Hazardous: ${neo.isPotentiallyHazardousAsteroid ?? false ? 'Yes' : 'No'}',
+                                  style: TextStyle(
+                                    color:
+                                        neo.isPotentiallyHazardousAsteroid ??
+                                                false
+                                            ? Colors.red
+                                            : Colors.green,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   Expanded(
                     child:
                         state is HomeLoading
