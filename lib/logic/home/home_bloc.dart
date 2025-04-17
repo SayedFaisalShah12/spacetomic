@@ -1,93 +1,47 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
-import '../../core/models/neows.dart';
-import '../../core/repositories/neo_repository.dart';
+import '../../core/models/space_content.dart';
 import 'home_event.dart';
 import 'home_state.dart';
 
-// Events
-abstract class HomeEvent extends Equatable {
-  const HomeEvent();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class LoadNeowsData extends HomeEvent {
-  const LoadNeowsData();
-}
-
-class ChangeCategory extends HomeEvent {
-  final int index;
-
-  const ChangeCategory(this.index);
-
-  @override
-  List<Object?> get props => [index];
-}
-
-// States
-abstract class HomeState extends Equatable {
-  const HomeState();
-
-  @override
-  List<Object?> get props => [];
-}
-
-class HomeInitial extends HomeState {}
-
-class HomeLoading extends HomeState {}
-
-class HomeLoaded extends HomeState {
-  final Neows neows;
-  final int selectedCategoryIndex;
-
-  const HomeLoaded({required this.neows, this.selectedCategoryIndex = 0});
-
-  @override
-  List<Object?> get props => [neows, selectedCategoryIndex];
-}
-
-class HomeError extends HomeState {
-  final String message;
-
-  const HomeError(this.message);
-
-  @override
-  List<Object?> get props => [message];
-}
-
-// Bloc
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  final NeoRepository neoRepository;
+  HomeBloc() : super(HomeInitial()) {
+    on<LoadHomeData>((event, emit) async {
+      try {
+        emit(HomeLoading());
 
-  HomeBloc({required this.neoRepository}) : super(HomeLoading()) {
-    on<LoadNeowsData>(_onLoadNeowsData);
-    on<ChangeCategory>(_onChangeCategory);
-  }
+        // Simulated content - replace with actual API call later
+        final content = [
+          const SpaceContent(
+            imageUrl: 'https://example.com/mars.jpg',
+            title: 'Mars Exploration',
+            subtitle: 'Latest discoveries from the Red Planet',
+            link: 'https://example.com/mars',
+          ),
+          const SpaceContent(
+            imageUrl: 'https://example.com/jupiter.jpg',
+            title: 'Jupiter\'s Moons',
+            subtitle: 'Exploring the Galilean satellites',
+            link: 'https://example.com/jupiter',
+          ),
+          const SpaceContent(
+            imageUrl: 'https://example.com/blackhole.jpg',
+            title: 'Black Holes',
+            subtitle: 'Mysteries of the universe',
+            link: 'https://example.com/blackhole',
+          ),
+        ];
 
-  Future<void> _onLoadNeowsData(
-    LoadNeowsData event,
-    Emitter<HomeState> emit,
-  ) async {
-    try {
-      emit(HomeLoading());
-      final neows = await neoRepository.getNearEarthObjects();
-      emit(HomeLoaded(neows: neows));
-    } catch (e) {
-      emit(HomeError(e.toString()));
-    }
-  }
+        emit(HomeLoaded(content: content));
+      } catch (e) {
+        emit(HomeError(e.toString()));
+      }
+    });
 
-  void _onChangeCategory(ChangeCategory event, Emitter<HomeState> emit) {
-    if (state is HomeLoaded) {
-      final currentState = state as HomeLoaded;
-      emit(
-        HomeLoaded(
-          neows: currentState.neows,
-          selectedCategoryIndex: event.index,
-        ),
-      );
-    }
+    on<ChangeCategory>((event, emit) {
+      if (state is HomeLoaded) {
+        final currentState = state as HomeLoaded;
+        emit(currentState.copyWith(selectedCategoryIndex: event.index));
+      }
+    });
   }
 }
